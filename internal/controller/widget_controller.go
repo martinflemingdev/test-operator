@@ -19,11 +19,13 @@ package controller
 import (
 	"context"
 
+	"k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/runtime"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/log"
 
+	"github.com/go-logr/logr"
 	enterprisev1alpha1 "github.com/martinflemingdev/test-operator/api/v1alpha1"
 )
 
@@ -47,9 +49,32 @@ type WidgetReconciler struct {
 // For more details, check Reconcile and its Result here:
 // - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.17.3/pkg/reconcile
 func (r *WidgetReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
-	_ = log.FromContext(ctx)
+	logger := log.FromContext(ctx)
 
 	// TODO(user): your logic here
+	widget := &enterprisev1alpha1.Widget{}
+	err := r.Get(ctx, req.NamespacedName, widget)
+	if err != nil {
+		if errors.IsNotFound(err) {
+			// Request object not found, could have been deleted after reconcile request.
+			// Owned objects are automatically garbage collected. For additional cleanup logic use finalizers.
+			// Return and don't requeue
+			logger.Info("Widget resource not found. Ignoring since object must be deleted")
+			return ctrl.Result{}, nil
+		}
+		// Error reading the object - requeue the request.
+		logger.Error(err, "Failed to get Widget")
+		return ctrl.Result{Requeue: true}, err
+	}
+
+	// extract spec data
+	h := widget.Spec.Height
+	w := widget.Spec.Width
+	d := widget.Spec.Depth
+
+	// update status data
+	widget.Status.Volume = h*w*d
+	r.Client.Status().Update(ctx, widget)
 
 	return ctrl.Result{}, nil
 }

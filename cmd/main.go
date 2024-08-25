@@ -125,6 +125,7 @@ func main() {
 	if err = (&controller.WidgetReconciler{
 		Client: mgr.GetClient(),
 		Scheme: mgr.GetScheme(),
+		// Recorder: mgr.GetEventRecorderFor("memcached-controller"), // not adding this
 	}).SetupWithManager(mgr); err != nil {
 		setupLog.Error(err, "unable to create controller", "controller", "Widget")
 		os.Exit(1)
