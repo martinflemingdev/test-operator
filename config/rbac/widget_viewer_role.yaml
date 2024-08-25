@@ -1,0 +1,23 @@
+# permissions for end users to view widgets.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app.kubernetes.io/name: test-operator
+    app.kubernetes.io/managed-by: kustomize
+  name: widget-viewer-role
+rules:
+- apiGroups:
+  - enterprise.mftest.com
+  resources:
+  - widgets
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - enterprise.mftest.com
+  resources:
+  - widgets/status
+  verbs:
+  - get
