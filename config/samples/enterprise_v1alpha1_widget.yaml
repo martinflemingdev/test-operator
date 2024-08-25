@@ -6,6 +6,6 @@ metadata:
     app.kubernetes.io/managed-by: kustomize
   name: widget-sample
 spec:
-  height: 2
-  width: 2
-  depth: 2
+  height: 21
+  width: 3
+  depth: 4

@@ -18,6 +18,7 @@ package controller
 
 import (
 	"context"
+	"fmt"
 
 	"k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/runtime"
@@ -53,6 +54,7 @@ func (r *WidgetReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctr
 	// TODO(user): your logic here
 	widget := &enterprisev1alpha1.Widget{}
 	err := r.Get(ctx, req.NamespacedName, widget)
+
 	if err != nil {
 		if errors.IsNotFound(err) {
 			// Request object not found, could have been deleted after reconcile request.
@@ -65,15 +67,28 @@ func (r *WidgetReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctr
 		logger.Error(err, "Failed to get Widget")
 		return ctrl.Result{Requeue: true}, err
 	}
+	logger.Info("Widget acquired!")
 
 	// extract spec data
 	h := widget.Spec.Height
 	w := widget.Spec.Width
 	d := widget.Spec.Depth
+	volume := h * w * d
 
-	// update status data
-	widget.Status.Volume = h * w * d
-	r.Client.Status().Update(ctx, widget)
+	message := fmt.Sprintf("Extracted widget specs: Height=%v, Width=%v, Depth=%v", h, w, d)
+	logger.Info(message)
+
+	// check if desired state matches actual state
+	if volume == widget.Status.Volume {
+		logger.Info("Status matches spec, no update required")
+		return ctrl.Result{}, nil
+	}
+
+	// update status data if needed
+	widget.Status.Volume = volume
+	_ = r.Client.Status().Update(ctx, widget)
+	message = fmt.Sprintf("The volume is: %d", volume)
+	logger.Info(message)
 
 	return ctrl.Result{}, nil
 }
