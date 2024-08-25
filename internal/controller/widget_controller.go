@@ -25,7 +25,6 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/log"
 
-	"github.com/go-logr/logr"
 	enterprisev1alpha1 "github.com/martinflemingdev/test-operator/api/v1alpha1"
 )
 
@@ -73,7 +72,7 @@ func (r *WidgetReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctr
 	d := widget.Spec.Depth
 
 	// update status data
-	widget.Status.Volume = h*w*d
+	widget.Status.Volume = h * w * d
 	r.Client.Status().Update(ctx, widget)
 
 	return ctrl.Result{}, nil
