@@ -1,8 +1,17 @@
 # test-operator
-// TODO(user): Add simple overview of use/purpose
-
-## Description
-// TODO(user): An in-depth paragraph about your project and overview of use
+2024-08-25T17:22:07Z    INFO    setup   starting manager
+2024-08-25T17:22:07Z    INFO    starting server {"kind": "health probe", "addr": "[::]:8081"}
+2024-08-25T17:22:07Z    INFO    controller-runtime.metrics      Starting metrics server
+2024-08-25T17:22:07Z    INFO    controller-runtime.metrics      Serving metrics server  {"bindAddress": ":8080", "secure": false}
+2024-08-25T17:22:07Z    INFO    **Starting EventSource**    {"controller": "widget", "controllerGroup": "enterprise.mftest.com", "controllerKind": "Widget", "source": "kind source: *v1alpha1.Widget"}
+2024-08-25T17:22:07Z    INFO    **Starting Controller**     {"controller": "widget", "controllerGroup": "enterprise.mftest.com", "controllerKind": "Widget"}
+2024-08-25T17:22:07Z    INFO    **Starting workers**        {"controller": "widget", "controllerGroup": "enterprise.mftest.com", "controllerKind": "Widget", "worker count": 1}
+2024-08-25T17:22:36Z    INFO    **Widget acquired!**        {"controller": "widget", "controllerGroup": "enterprise.mftest.com", "controllerKind": "Widget", "Widget": {"name":"widget-sample","namespace":"default"}, "namespace": "default", "name": "widget-sample", "reconcileID": "5ba01e47-2dd7-43f8-8774-8ba433e907bc"}
+2024-08-25T17:22:36Z    INFO    **Extracted widget specs: Height=21, Width=3, Depth=4**     {"controller": "widget", "controllerGroup": "enterprise.mftest.com", "controllerKind": "Widget", "Widget": {"name":"widget-sample","namespace":"default"}, "namespace": "default", "name": "widget-sample", "reconcileID": "5ba01e47-2dd7-43f8-8774-8ba433e907bc"}
+2024-08-25T17:22:36Z    INFO    **The volume is: 252**      {"controller": "widget", "controllerGroup": "enterprise.mftest.com", "controllerKind": "Widget", "Widget": {"name":"widget-sample","namespace":"default"}, "namespace": "default", "name": "widget-sample", "reconcileID": "5ba01e47-2dd7-43f8-8774-8ba433e907bc"}
+2024-08-25T17:22:36Z    INFO    **Widget acquired!**        {"controller": "widget", "controllerGroup": "enterprise.mftest.com", "controllerKind": "Widget", "Widget": {"name":"widget-sample","namespace":"default"}, "namespace": "default", "name": "widget-sample", "reconcileID": "baa73dc0-857e-47ef-adfe-0c38091b5482"}
+2024-08-25T17:22:36Z    INFO    **Extracted widget specs: Height=21, Width=3, Depth=4**     {"controller": "widget", "controllerGroup": "enterprise.mftest.com", "controllerKind": "Widget", "Widget": {"name":"widget-sample","namespace":"default"}, "namespace": "default", "name": "widget-sample", "reconcileID": "baa73dc0-857e-47ef-adfe-0c38091b5482"}
+2024-08-25T17:22:36Z    INFO    **Status matches spec, no update required** {"controller": "widget", "controllerGroup": "enterprise.mftest.com", "controllerKind": "Widget", "Widget": {"name":"widget-sample","namespace":"default"}, "namespace": "default", "name": "widget-sample", "reconcileID": "baa73dc0-857e-47ef-adfe-0c38091b5482"}
 
 ## Getting Started
 
