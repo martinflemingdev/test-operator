@@ -29,13 +29,19 @@ type WidgetSpec struct {
 	// Important: Run "make" to regenerate code after modifying this file
 
 	// Foo is an example field of Widget. Edit widget_types.go to remove/update
-	Foo string `json:"foo,omitempty"`
+	Height int `json:"height,omitempty"`
+
+	Width int `json:"width,omitempty"`
+
+	Depth int `json:"depth,omitempty"`
 }
 
 // WidgetStatus defines the observed state of Widget
 type WidgetStatus struct {
 	// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
+
+	Volume int `json:"depth,omitempty"`
 }
 
 //+kubebuilder:object:root=true
