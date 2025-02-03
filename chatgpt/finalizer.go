@@ -64,3 +64,59 @@ func (r *WidgetReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctr
 
     return ctrl.Result{}, nil
 }
+
+// RAW JSON PATCH PERSERVING ORDER
+
+import (
+    "context"
+    "encoding/json"
+    "fmt"
+    "sigs.k8s.io/controller-runtime/pkg/client"
+    "k8s.io/apimachinery/pkg/types"
+    "sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
+)
+
+func (r *WidgetReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
+    widget := &v1alpha1.Widget{}
+    if err := r.Get(ctx, req.NamespacedName, widget); err != nil {
+        return ctrl.Result{}, client.IgnoreNotFound(err)
+    }
+
+    finalizerName := "finalizer.widget.example.com"
+
+    if controllerutil.ContainsFinalizer(widget, finalizerName) {
+        // Find the index of our finalizer
+        var finalizerIndex int = -1
+        for i, f := range widget.Finalizers {
+            if f == finalizerName {
+                finalizerIndex = i
+                break
+            }
+        }
+
+        // If our finalizer exists, create a JSON patch to remove it by index
+        if finalizerIndex != -1 {
+            patchData := []map[string]interface{}{
+                {
+                    "op":   "remove",
+                    "path": fmt.Sprintf("/metadata/finalizers/%d", finalizerIndex),
+                },
+            }
+
+            patchBytes, err := json.Marshal(patchData)
+            if err != nil {
+                return ctrl.Result{}, fmt.Errorf("failed to marshal JSON patch: %w", err)
+            }
+
+            // Apply JSON Patch which removes only our finalizer without modifying order
+            err = r.Client.Patch(ctx, widget, client.RawPatch(types.JSONPatchType, patchBytes))
+            if err != nil {
+                return ctrl.Result{}, fmt.Errorf("failed to apply JSON patch: %w", err)
+            }
+
+            return ctrl.Result{}, nil
+        }
+    }
+
+    return ctrl.Result{}, nil
+}
